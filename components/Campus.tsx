@@ -1,9 +1,21 @@
-import { site } from "@/content/site";
+import { site, type CampusEntry } from "@/content/site";
 import { Section } from "./Section";
 import { PhotoStrip } from "./Photos";
 
 export function Campus() {
-  const { heading, intro, entries } = site.campus;
+  return <CampusView {...site.campus} />;
+}
+
+/** Pure view, also used by the editor's preview. */
+export function CampusView({
+  heading,
+  intro,
+  entries,
+}: {
+  heading: string;
+  intro: string;
+  entries: CampusEntry[];
+}) {
   return (
     <Section id="campus" heading={heading}>
       <p className="-mt-2 max-w-[640px]">{intro}</p>

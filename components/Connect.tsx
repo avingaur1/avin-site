@@ -1,9 +1,21 @@
-import { site } from "@/content/site";
+import { site, type LinkItem } from "@/content/site";
 import { Section } from "./Section";
 
 export function Connect() {
-  const { heading, text, links } = site.connect;
-  const visible = links.filter((l) => l.href);
+  return <ConnectView {...site.connect} />;
+}
+
+/** Pure view, also used by the editor's preview. */
+export function ConnectView({
+  heading,
+  text,
+  links,
+}: {
+  heading: string;
+  text: string;
+  links: LinkItem[];
+}) {
+  const visible = links.filter((l): l is { label: string; href: string } => !!l.href);
   return (
     <Section id="connect" heading={heading}>
       <p className="-mt-2 max-w-[600px]">{text}</p>

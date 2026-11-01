@@ -2,7 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { site, type WorkEntry } from "@/content/site";
 import { Section } from "./Section";
 
-function Row({ entry }: { entry: WorkEntry }) {
+export function WorkRow({ entry }: { entry: WorkEntry }) {
   const body = (
     <>
       <div className="min-w-0 flex-1">
@@ -52,12 +52,24 @@ function Row({ entry }: { entry: WorkEntry }) {
 }
 
 export function Work() {
-  const { heading, subheading, entries } = site.work;
+  return <WorkView {...site.work} />;
+}
+
+/** Pure view, also used by the editor's preview. */
+export function WorkView({
+  heading,
+  subheading,
+  entries,
+}: {
+  heading: string;
+  subheading?: string;
+  entries: WorkEntry[];
+}) {
   return (
     <Section id="work" heading={heading} subheading={subheading}>
       <ul className="-mt-5">
         {entries.map((e) => (
-          <Row key={e.title} entry={e} />
+          <WorkRow key={e.title} entry={e} />
         ))}
       </ul>
     </Section>

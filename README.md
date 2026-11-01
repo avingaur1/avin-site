@@ -5,26 +5,24 @@ Hosted on GitHub Pages, with a browser editor at `/admin`.
 
 ## Editing from the website (`/admin`)
 
-Open `https://<your-site>/admin/` and sign in with a GitHub access token.
+Open `https://<your-site>/admin/` and sign in.
 
-- **Thoughts**: write, edit and publish posts. Turn **Draft** on to keep a post hidden.
-  Images can be added straight into a post.
-- **Homepage**: every section's text, the work entries, campus stories and photos,
-  the Beyond the Resume photo strip and interests, and your contact links.
+- **Work**: add, edit, reorder (drag) and delete experiences, with month/year pickers and a Present option.
+- **Photos**: upload several photos at once (drag them in, or pick from your phone), add captions and
+  descriptions, drag to reorder, remove. A live-style preview shows the gallery as it will appear.
+- **Website**: introduction and portrait, campus experiences, Beyond the Resume text and interests,
+  contact links and footer.
 
-Clicking **Save** commits the change to this repo. GitHub Pages rebuilds the site,
-and the change is live in about two minutes (watch the **Actions** tab).
-Uploaded photos are resized to at most 2000px and converted to WebP automatically.
+Changes are kept as a draft on that device until you press **Publish**. Publishing makes one commit
+(`content/site.json` plus any new photos in `public/images/`), and the editor shows when the live site
+has updated. Photos are resized to at most 2000px, converted to WebP and stripped of location data
+in the browser before upload. Removing a photo from the gallery keeps its file, so it can be added back.
 
-The editor is configured in `public/admin/config.yml`. If you rename the repo or
-change your GitHub username, update `backend.repo` there.
+Thoughts are not edited here: they come from Medium automatically.
 
-### Access token
-
-GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens**
-→ Generate new token. Repository access: **Only select repositories** → this repo.
-Permissions: **Contents → Read and write**. Paste it into the editor's sign-in screen.
-The editor keeps it in that browser only. When it expires, generate a new one.
+Sign-in setup (one time): see [`admin-auth/SETUP.md`](admin-auth/SETUP.md).
+The editor's code is in `editor/` and `app/admin/`. The previous editor (Sveltia CMS) is still
+available at `/admin/classic/`, configured in `public/admin/classic/config.yml`.
 
 ## Editing files directly
 

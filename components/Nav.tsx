@@ -13,7 +13,9 @@ export function Nav({ home = true }: { home?: boolean }) {
           href={home ? "#top" : "/"}
           className="text-[15px] font-semibold tracking-tight text-fg hover:text-accent"
         >
-          avin.
+          {/* The full domain needs ~390px of width beside the links; narrower phones keep the short mark. */}
+          <span className="min-[390px]:hidden">avin.</span>
+          <span className="hidden text-[14px] min-[390px]:inline sm:text-[15px]">avingaur.com</span>
         </Link>
         <div className="flex items-center gap-2 text-[13px] min-[360px]:gap-4 sm:gap-6 sm:text-[14px]">
           <ul className="flex items-center gap-2.5 min-[360px]:gap-4 sm:gap-6">

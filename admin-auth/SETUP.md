@@ -1,6 +1,6 @@
 # Editor sign-in: one-time setup (about 15 minutes)
 
-The editor lives at **https://avingaur1.github.io/avin-site/admin/**.
+The editor lives at **https://avingaur.com/admin/**.
 
 It works straight away with an access key (Option A). For one-click "Sign in with GitHub",
 do Option B once. Nothing secret ever goes into the website's code.
@@ -32,7 +32,7 @@ You'll create three things: a GitHub App (who's allowed to do what), a Cloudflar
 1. Open https://github.com/settings/apps/new
 2. Fill in:
    - **GitHub App name:** `avin-site editor` (any unique name)
-   - **Homepage URL:** `https://avingaur1.github.io/avin-site/`
+   - **Homepage URL:** `https://avingaur.com/`
    - **Callback URL:** leave for now (you'll fill it in step 3)
    - **Expire user authorization tokens:** ✅ ticked (sign-ins last 8 hours)
    - **Request user authorization (OAuth) during installation:** leave unticked
@@ -65,7 +65,7 @@ The app can only touch `avin-site`, and only its files and deploy status.
    | Text | `GITHUB_CLIENT_ID` | the Client ID from step 1.6 |
    | **Secret** | `GITHUB_CLIENT_SECRET` | the client secret from step 1.6 |
    | Text | `ALLOWED_USER` | `avingaur1` |
-   | Text | `DASHBOARD_URL` | `https://avingaur1.github.io/avin-site/admin/` |
+   | Text | `DASHBOARD_URL` | `https://avingaur.com/admin/` |
 
    **Deploy** after adding them. The secret must be type *Secret*.
 
@@ -88,9 +88,9 @@ After about two minutes the editor shows **Sign in with GitHub**.
 
 ---
 
-## If you move to your own domain
+## If the domain ever changes
 
-Update **`DASHBOARD_URL`** in the Worker to `https://<your-domain>/admin/`, and the
+Update **`DASHBOARD_URL`** in the Worker to `https://<new-domain>/admin/`, and the
 **Homepage URL** of the GitHub App. Nothing else changes.
 
 ## Safety, in short

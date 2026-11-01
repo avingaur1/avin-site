@@ -48,7 +48,7 @@ const d: any = data;
 
 export const site = {
   name: "Avin Gaur",
-  url: (d.url || "https://avingaur1.github.io/avin-site").replace(/\/$/, ""),
+  url: (d.url || "https://avingaur.com").replace(/\/$/, ""),
   description: d.description ?? "",
 
   // Navigation is part of the design, so it stays in code.

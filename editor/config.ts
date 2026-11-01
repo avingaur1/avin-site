@@ -34,7 +34,7 @@ export const RAW =
     "",
   );
 
-export const LIVE_URL = ((data as { url?: string }).url || "https://avingaur1.github.io/avin-site").replace(/\/$/, "");
+export const LIVE_URL = ((data as { url?: string }).url || "https://avingaur.com").replace(/\/$/, "");
 export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 /** Photo optimisation: longest side and WebP quality. */

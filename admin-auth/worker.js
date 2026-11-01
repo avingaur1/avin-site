@@ -9,7 +9,7 @@
  *   GITHUB_CLIENT_ID      text    from your GitHub App
  *   GITHUB_CLIENT_SECRET  secret  from your GitHub App  (type: Secret, never Text)
  *   ALLOWED_USER          text    avingaur1
- *   DASHBOARD_URL         text    https://avingaur1.github.io/avin-site/admin/
+ *   DASHBOARD_URL         text    https://avingaur.com/admin/
  *
  * Setup steps: see admin-auth/SETUP.md.
  */

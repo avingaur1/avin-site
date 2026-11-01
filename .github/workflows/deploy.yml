@@ -31,7 +31,8 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # The site is served from the root of https://avingaur.com, so no path prefix.
+          NEXT_PUBLIC_BASE_PATH: ""
           # Address of the editor's sign-in helper (Settings → Secrets and variables → Actions → Variables).
           NEXT_PUBLIC_ADMIN_AUTH_URL: ${{ vars.ADMIN_AUTH_URL }}
       - uses: actions/upload-pages-artifact@v3

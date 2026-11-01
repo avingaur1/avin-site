@@ -59,8 +59,11 @@ including saves from the editor.
 3. Custom domain: **Settings → Pages → Custom domain**, add the DNS records GitHub lists,
    then tick **Enforce HTTPS**. Update **Site address** in the editor (or `url` in `content/site.json`).
 
-The workflow handles the base path automatically, so the site works both at
-`username.github.io/repo-name` and on a custom domain.
+The site is served from the root of **https://avingaur.com**, so the workflow builds with no path
+prefix (`NEXT_PUBLIC_BASE_PATH: ""`). The custom domain itself is stored in **Settings → Pages**;
+deployments don't change it. `public/CNAME` records the same domain for reference.
+To serve the site from `username.github.io/repo-name` instead, set `NEXT_PUBLIC_BASE_PATH`
+to `/repo-name` in `.github/workflows/deploy.yml`.
 
 ## Run it locally
 

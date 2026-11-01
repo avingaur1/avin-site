@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 /**
  * Static export for GitHub Pages.
- * The deploy workflow sets NEXT_PUBLIC_BASE_PATH automatically:
- * "/<repo-name>" on username.github.io/<repo-name>, and "" once a custom domain is set.
+ * The site lives at the root of https://avingaur.com, so the deploy workflow sets
+ * NEXT_PUBLIC_BASE_PATH to "". (It would be "/<repo-name>" for username.github.io/<repo-name>.)
  */
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 

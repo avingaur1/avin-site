@@ -5,12 +5,19 @@ import { Section } from "./Section";
 function Row({ entry }: { entry: WorkEntry }) {
   const body = (
     <>
-      <div className="min-w-0">
-        <h3 className="font-medium text-fg transition-colors duration-150 group-hover:text-accent">
-          {entry.title}
-        </h3>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-4">
+          <h3 className="font-medium text-fg transition-colors duration-150 group-hover:text-accent">
+            {entry.title}
+          </h3>
+          {entry.period && (
+            <span className="shrink-0 text-[13px] tabular-nums text-muted">{entry.period}</span>
+          )}
+        </div>
         {entry.role && <p className="text-[14px] text-fg/80">{entry.role}</p>}
-        <p className="mt-0.5 text-[14px] leading-[1.6] text-muted">{entry.description}</p>
+        {entry.description && (
+          <p className="mt-0.5 text-[14px] leading-[1.6] text-muted">{entry.description}</p>
+        )}
       </div>
       {entry.href && (
         <ArrowUpRight

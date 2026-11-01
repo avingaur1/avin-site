@@ -1,45 +1,42 @@
 # avin.
 
 Personal website of Avin Gaur. Next.js (App Router) + TypeScript + Tailwind CSS, set in Geist.
+Hosted on GitHub Pages, with a browser editor at `/admin`.
 
-## Run it locally
+## Editing from the website (`/admin`)
 
-```bash
-npm install
-npm run dev
-```
+Open `https://<your-site>/admin/` and sign in with a GitHub access token.
 
-Open http://localhost:3000.
+- **Thoughts**: write, edit and publish posts. Turn **Draft** on to keep a post hidden.
+  Images can be added straight into a post.
+- **Homepage**: every section's text, the work entries, campus stories and photos,
+  the Beyond the Resume photo strip and interests, and your contact links.
 
-## Editing content
+Clicking **Save** commits the change to this repo. GitHub Pages rebuilds the site,
+and the change is live in about two minutes (watch the **Actions** tab).
+Uploaded photos are resized to at most 2000px and converted to WebP automatically.
 
-Almost everything lives in **`content/site.ts`**. You shouldn't need to touch any component.
+The editor is configured in `public/admin/config.yml`. If you rename the repo or
+change your GitHub username, update `backend.repo` there.
 
-| What | Where in `site.ts` |
+### Access token
+
+GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens**
+→ Generate new token. Repository access: **Only select repositories** → this repo.
+Permissions: **Contents → Read and write**. Paste it into the editor's sign-in screen.
+The editor keeps it in that browser only. When it expires, generate a new one.
+
+## Editing files directly
+
+| What | Where |
 | --- | --- |
-| Intro lines | `intro` |
-| Work entries | `work.entries` — add `href` to make a row clickable (an arrow appears) |
-| Campus stories | `campus.entries` — each has `paragraphs` and optional `photos` |
-| Beyond the Resume | `beyond.items`, `beyond.photos`, `beyond.interactiveResume` |
-| Contact links | `connect.links` — a link with an empty `href` is hidden |
-| Site URL for SEO | `url` — set this to your real domain after deploying |
+| Homepage text, photos, links | `content/site.json` |
+| Posts | `content/thoughts/*.md` |
+| Photos | `public/images/` (refer to them as `/images/name.jpg`) |
+| Colours | `app/globals.css` |
+| Layout | `components/` |
 
-### Adding photos
-
-1. Put the image in `public/images/`, e.g. `public/images/hostel.jpg`.
-2. Reference it in `site.ts`:
-
-```ts
-photos: [{ src: "/images/hostel.jpg", alt: "Karakoram hostel at night", caption: "Optional caption" }]
-```
-
-`beyond.photos` always shows three slots; empty ones show a quiet placeholder frame.
-Campus photos only appear once you add them.
-
-### Writing a thought
-
-Articles are Markdown files in `content/thoughts/`. The file name becomes the URL
-(`why-i-like-building-things.md` → `/thoughts/why-i-like-building-things`).
+A post is published only when `draft: false` **and** it has a `date`:
 
 ```md
 ---
@@ -52,26 +49,32 @@ summary: "One line used for search results and link previews."
 Write here. Normal Markdown works: **bold**, links, lists, quotes, images.
 ```
 
-A post is published only when `draft: false` **and** it has a `date`.
 Drafts are listed on the homepage as drafts (no link) and never get a page.
 When no posts are published, the section shows "Some thoughts are taking shape."
 
 ## Deploying (GitHub Pages)
 
-The site is a static export hosted on **GitHub Pages**. `.github/workflows/deploy.yml`
-builds and publishes it on every push to `main`.
+`.github/workflows/deploy.yml` builds and publishes the site on every push to `main`,
+including saves from the editor.
 
 1. Create a public repo and upload this folder's contents (including `.github/`).
 2. Repo **Settings → Pages → Source: GitHub Actions**.
-3. Each push to `main` deploys. Progress is under the **Actions** tab.
-4. Custom domain: **Settings → Pages → Custom domain**, then add the DNS records GitHub lists at your registrar. Tick **Enforce HTTPS** once it's available.
-5. Set `url` in `content/site.ts` to your final address.
+3. Custom domain: **Settings → Pages → Custom domain**, add the DNS records GitHub lists,
+   then tick **Enforce HTTPS**. Update **Site address** in the editor (or `url` in `content/site.json`).
 
 The workflow handles the base path automatically, so the site works both at
 `username.github.io/repo-name` and on a custom domain.
 
+## Run it locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:3000.
+
 ## Notes
 
 - Theme follows the visitor's system setting until they use the toggle; their choice is saved in localStorage. A tiny inline script in `app/layout.tsx` applies it before first paint, so there's no flash.
-- Colours are CSS variables in `app/globals.css`.
-- `sitemap.xml` and `robots.txt` are generated automatically.
+- `sitemap.xml` and `robots.txt` are generated automatically. `/admin` is excluded from search engines.

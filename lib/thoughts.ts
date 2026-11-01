@@ -49,7 +49,13 @@ export function getDraftThoughts(): Thought[] {
 export async function getThought(slug: string) {
   const t = readAll().find((x) => x.slug === slug && !x.draft);
   if (!t) return null;
-  const html = await marked.parse(t.body);
+  // Images uploaded from the editor are saved as "/images/…"; add the
+  // GitHub Pages base path so they also load on username.github.io/repo.
+  const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const html = (await marked.parse(t.body)).replace(
+    /(<img[^>]*\ssrc=")\/(?!\/)/g,
+    `$1${base}/`,
+  );
   return { ...t, html };
 }
 

@@ -27,7 +27,7 @@ export function PhotoStrip({
               <div className="relative aspect-[4/3] overflow-hidden rounded-[4px] bg-placeholder">
                 <Image
                   src={p.src.startsWith("/") ? `${BASE}${p.src}` : p.src}
-                  alt={p.alt}
+                  alt={p.alt ?? ""}
                   fill
                   sizes="(min-width: 780px) 240px, 33vw"
                   className="object-cover"

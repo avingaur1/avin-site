@@ -13,12 +13,12 @@ export function Campus() {
           <article key={e.title} className="grid gap-2 md:grid-cols-[200px_1fr] md:gap-8">
             <h3 className="font-medium">{e.title}</h3>
             <div className="space-y-3">
-              {e.paragraphs.map((p, i) => (
+              {(e.paragraphs ?? []).map((p, i) => (
                 <p key={i} className="text-muted">
                   {p}
                 </p>
               ))}
-              {e.photos && e.photos.length > 0 && (
+              {e.photos && e.photos.some((p) => p.src) && (
                 <div className="pt-3">
                   <PhotoStrip photos={e.photos} />
                 </div>

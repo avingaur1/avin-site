@@ -1,18 +1,31 @@
 import { site } from "@/content/site";
+import { imageSize } from "@/lib/imageSize";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export function Intro() {
   const { heading, lines, portrait } = site.intro;
+  const local = portrait.src.startsWith("/");
+  const size = local ? imageSize(portrait.src) : null;
   const photo = portrait.src
-    ? { src: portrait.src.startsWith("/") ? `${BASE}${portrait.src}` : portrait.src, alt: portrait.alt }
+    ? {
+        src: local ? `${BASE}${portrait.src}` : portrait.src,
+        alt: portrait.alt,
+        width: size?.width ?? 600,
+        height: size?.height ?? 800,
+      }
     : null;
 
   return (
-    <section id="top" aria-label="Introduction" className="pb-16 pt-16 md:pb-20 md:pt-24">
-      {/* Text on the left, a small portrait on the right; stacks on phones.
-          With no portrait set, the text simply takes the full width as before. */}
-      <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-14">
+    <section
+      id="top"
+      aria-label="Introduction"
+      className={`pt-16 md:pb-20 md:pt-24 ${photo ? "pb-12" : "pb-16"}`}
+    >
+      {/* Desktop: text on the left, a small portrait on the right.
+          Phones: text stays left-aligned, the portrait sits centred below it.
+          With no portrait set, the text simply takes the full width. */}
+      <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-14">
         <div className="min-w-0">
           <h1 className="text-[40px] font-semibold leading-[1.05] tracking-[-0.035em] md:text-[56px]">
             {heading}
@@ -32,10 +45,10 @@ export function Intro() {
           <img
             src={photo.src}
             alt={photo.alt}
-            width={600}
-            height={800}
+            width={photo.width}
+            height={photo.height}
             fetchPriority="high"
-            className="aspect-[3/4] w-32 shrink-0 rounded-[6px] bg-placeholder object-cover sm:w-36 md:mt-2 md:w-[168px]"
+            className="mx-auto h-auto w-[min(240px,100%)] shrink-0 rounded-[6px] bg-placeholder md:mx-0 md:mt-2 md:aspect-[3/4] md:w-[168px] md:object-cover"
           />
         )}
       </div>

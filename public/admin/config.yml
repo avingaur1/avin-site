@@ -165,7 +165,7 @@ collections:
                 summary: "{{fields.label}}"
                 fields:
                   - { name: label, label: Label, widget: string }
-                  - { name: text, label: Text, widget: string, required: false, hint: Leave empty to show “Coming soon”. }
+                  - { name: text, label: Text, widget: string, required: false, hint: Leave empty to hide this row. }
                   - { name: href, label: Link, widget: string, required: false }
               - name: photos
                 label: Photo strip

@@ -33,7 +33,7 @@ export type CampusEntry = {
 
 export type BeyondItem = {
   label: string;
-  /** Empty shows "Coming soon". */
+  /** Rows with empty text are hidden. */
   text?: string;
   href?: string;
 };

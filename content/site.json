@@ -72,24 +72,9 @@
     "description": "There's a lot more to me than the things I put on a resume. This is a small space for everything else — places, people, interests, random projects, and things that make life interesting.",
     "items": [
       {
-        "label": "Places",
-        "text": "",
-        "href": ""
-      },
-      {
-        "label": "Books & music",
-        "text": "",
-        "href": ""
-      },
-      {
-        "label": "Side projects",
-        "text": "",
-        "href": ""
-      },
-      {
-        "label": "Memories",
-        "text": "",
-        "href": ""
+        "label": "Music",
+        "text": "What I've been listening to",
+        "href": "https://open.spotify.com/user/31mjgs5n2ybijqx6xvpkxkr3z55q"
       }
     ],
     "photos": [

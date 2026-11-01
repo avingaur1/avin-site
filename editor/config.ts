@@ -37,6 +37,6 @@ export const RAW =
 export const LIVE_URL = ((data as { url?: string }).url || "https://avingaur1.github.io/avin-site").replace(/\/$/, "");
 export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-/** Photo optimisation, matching what the classic editor did. */
+/** Photo optimisation: longest side and WebP quality. */
 export const IMAGE_MAX_EDGE = 2000;
 export const IMAGE_QUALITY = 0.82;

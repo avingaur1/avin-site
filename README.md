@@ -21,8 +21,7 @@ in the browser before upload. Removing a photo from the gallery keeps its file, 
 Thoughts are not edited here: they come from Medium automatically.
 
 Sign-in setup (one time): see [`admin-auth/SETUP.md`](admin-auth/SETUP.md).
-The editor's code is in `editor/` and `app/admin/`. The previous editor (Sveltia CMS) is still
-available at `/admin/classic/`, configured in `public/admin/classic/config.yml`.
+The editor's code is in `editor/` and `app/admin/`.
 
 ## Editing files directly
 

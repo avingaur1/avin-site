@@ -101,7 +101,3 @@ Update **`DASHBOARD_URL`** in the Worker to `https://<your-domain>/admin/`, and 
 - Sign-ins expire after 8 hours and live only in that browser tab.
 - To cut off all access at once: GitHub → Settings → Applications → revoke the app,
   or delete the Worker.
-
-## Fallback
-
-The previous editor (Sveltia) still works at **/admin/classic/** with the same kind of access key.

@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Briefcase, Check, CircleAlert, ExternalLink, Eye, FileText, Images, Loader2, LogOut } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { ALLOWED_USER, IMAGES_DIR, LIVE_URL, PUBLIC_IMAGES, RAW, SITE_JSON, BASE_PATH } from "./config";
+import { ALLOWED_USER, IMAGES_DIR, LIVE_URL, PUBLIC_IMAGES, RAW, SITE_JSON } from "./config";
 import * as gh from "./github";
 import { GitHubError, type DeployState } from "./github";
 import { clearDraft, loadDraft, saveDraft, type Draft, type PendingUpload } from "./draft";
@@ -562,7 +562,7 @@ export default function AdminApp() {
           <p className="flex items-center gap-2" role="status"><Loader2 size={16} className="animate-spin" aria-hidden /> {pub.step}…</p>
         )}
         {pub.kind === "conflict" && (
-          <p>Someone (probably you, in the classic editor) changed the site after you opened this editor. Publishing yours will replace those changes.</p>
+          <p>Your site was changed somewhere else (another device or tab, or directly on GitHub) after you opened this editor. Publishing yours will replace those changes.</p>
         )}
         {pub.kind === "error" && (
           <p>{pub.message}. Your changes are still saved on this device.</p>
@@ -651,9 +651,6 @@ function AccountMenu({ user, onSignOut }: { user: { login: string; avatar_url: s
           <p className="px-3 py-2 text-[12.5px] text-muted">Signed in as {user?.login}</p>
           <a href={LIVE_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-placeholder">
             <ExternalLink size={14} aria-hidden /> View live site
-          </a>
-          <a href={`${BASE_PATH}/admin/classic/`} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-placeholder">
-            <FileText size={14} aria-hidden /> Classic editor
           </a>
           <button type="button" onClick={onSignOut} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-placeholder">
             <LogOut size={14} aria-hidden /> Sign out

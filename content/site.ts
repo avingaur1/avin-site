@@ -77,6 +77,8 @@ export const site = {
   thoughts: {
     heading: d.thoughts?.heading || "Thoughts",
     subheading: d.thoughts?.subheading ?? "",
+    /** Medium username (without @). Its latest posts are listed alongside your own. */
+    mediumUsername: (d.thoughts?.mediumUsername ?? "") as string,
     emptyMessage: d.thoughts?.emptyMessage || "Some thoughts are taking shape.",
   },
 

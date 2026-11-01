@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Rebuild daily (06:13 IST) so new Medium posts appear without a manual push.
+  schedule:
+    - cron: "43 0 * * *"
 
 permissions:
   contents: read

@@ -1,14 +1,14 @@
 {
   "intro": {
     "heading": "Avin Gaur",
+    "portrait": {
+      "src": "/images/img_6401.webp",
+      "alt": "Avin Gaur"
+    },
     "lines": [
       "I spend a lot of time thinking about businesses, trying out new ideas, and getting involved in things that interest me.",
       "Currently finishing my time at IIT Delhi. This website is a little bit of what I've been up to."
-    ],
-    "portrait": {
-      "src": "",
-      "alt": "Avin Gaur"
-    }
+    ]
   },
   "work": {
     "heading": "Work",
@@ -64,23 +64,24 @@
     "entries": [
       {
         "title": "Business & Consulting Club",
+        "href": "https://bnc.iitd.ac.in/",
         "paragraphs": [
           "A lot of my time at IIT Delhi has gone into the Business & Consulting Club. It's where I first got to work with real startups, lead projects, and put together initiatives for the rest of campus.",
           "Mostly, it taught me how much you can learn by just showing up and figuring things out alongside good people."
         ],
-        "photos": [],
-        "href": "https://bnc.iitd.ac.in/"
+        "photos": []
       },
       {
         "title": "Placement Cell",
+        "href": "https://ocs.iitd.ac.in/",
         "paragraphs": [
           "Being part of the placement cell meant a lot of coordinating with teams and talking to companies through the recruitment process. It's a very different view of placements than the one you get as a candidate."
         ],
-        "photos": [],
-        "href": "https://ocs.iitd.ac.in/"
+        "photos": []
       },
       {
         "title": "Beyond Academics",
+        "href": "",
         "paragraphs": [
           "Events, late-night conversations, hostel life, and the people who made it all memorable. A lot of what I'll remember from campus happened outside a classroom."
         ],

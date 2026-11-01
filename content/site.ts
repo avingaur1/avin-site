@@ -27,6 +27,8 @@ export type WorkEntry = {
 
 export type CampusEntry = {
   title: string;
+  /** Optional website. Makes the title a link that opens in a new tab. */
+  href?: string;
   paragraphs?: string[];
   photos?: Photo[];
 };

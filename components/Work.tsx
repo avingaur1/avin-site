@@ -6,7 +6,8 @@ function Row({ entry }: { entry: WorkEntry }) {
   const body = (
     <>
       <div className="min-w-0 flex-1">
-        <div className="flex items-baseline justify-between gap-4">
+        {/* Period sits on the right on wider screens and drops below the title on phones. */}
+        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
           <h3 className="font-medium text-fg transition-colors duration-150 group-hover:text-accent">
             {entry.title}
           </h3>

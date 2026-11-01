@@ -122,6 +122,11 @@ collections:
                 summary: "{{fields.title}}"
                 fields:
                   - { name: title, label: Title, widget: string }
+                  - name: href
+                    label: Website
+                    widget: string
+                    required: false
+                    hint: Optional. Makes the title a link with a small ↗ that opens in a new tab.
                   - name: paragraphs
                     label: Paragraphs
                     widget: list

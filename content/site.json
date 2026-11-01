@@ -1,6 +1,4 @@
 {
-  "url": "https://avingaur1.github.io/avin-site",
-  "description": "Avin Gaur — final-year student at IIT Delhi, interested in startups, strategy, technology, and a lot of things in between.",
   "intro": {
     "heading": "Avin Gaur.",
     "lines": [
@@ -15,15 +13,23 @@
       {
         "title": "Kepler Cannon",
         "role": "Strategy & Analytics Intern",
-        "description": "Worked on strategy and analytics in US retail banking."
+        "period": "",
+        "description": "Worked on strategy and analytics in US retail banking.",
+        "href": "https://www.keplercannon.com/index.html"
       },
       {
         "title": "Startup Consulting",
-        "description": "Worked on business strategy, growth, and analytics projects with startups."
+        "role": "",
+        "period": "",
+        "description": "Worked on business strategy, growth, and analytics projects with startups.",
+        "href": ""
       },
       {
         "title": "RFQ Opportunity Scoring",
-        "description": "Explored data analysis and predictive modelling to prioritize business opportunities."
+        "role": "",
+        "period": "",
+        "description": "Explored data analysis and predictive modelling to prioritize business opportunities.",
+        "href": ""
       }
     ]
   },
@@ -64,15 +70,43 @@
     "heading": "Beyond the Resume",
     "description": "There's a lot more to me than the things I put on a resume. This is a small space for everything else — places, people, interests, random projects, and things that make life interesting.",
     "items": [
-      { "label": "Places", "text": "" },
-      { "label": "Books & music", "text": "" },
-      { "label": "Side projects", "text": "" },
-      { "label": "Memories", "text": "" }
+      {
+        "label": "Places",
+        "text": "",
+        "href": ""
+      },
+      {
+        "label": "Books & music",
+        "text": "",
+        "href": ""
+      },
+      {
+        "label": "Side projects",
+        "text": "",
+        "href": ""
+      },
+      {
+        "label": "Memories",
+        "text": "",
+        "href": ""
+      }
     ],
     "photos": [
-      { "src": "", "alt": "" },
-      { "src": "", "alt": "" },
-      { "src": "", "alt": "" }
+      {
+        "src": "",
+        "alt": "",
+        "caption": ""
+      },
+      {
+        "src": "",
+        "alt": "",
+        "caption": ""
+      },
+      {
+        "src": "",
+        "alt": "",
+        "caption": ""
+      }
     ],
     "interactiveResume": {
       "label": "Explore my interactive resume",
@@ -83,13 +117,24 @@
     "heading": "Let's Connect",
     "text": "Always happy to talk about an interesting idea, collaborate on something, or just have a conversation.",
     "links": [
-      { "label": "Email", "href": "mailto:avingaur.iitd@gmail.com" },
-      { "label": "LinkedIn", "href": "https://www.linkedin.com/in/avin-gaur/" },
-      { "label": "GitHub", "href": "" }
+      {
+        "label": "Email",
+        "href": "mailto:avingaur.iitd@gmail.com"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/avin-gaur/"
+      },
+      {
+        "label": "GitHub",
+        "href": ""
+      }
     ]
   },
   "footer": {
     "left": "© 2026 Avin Gaur",
     "right": "Made with curiosity."
-  }
+  },
+  "url": "https://avingaur1.github.io/avin-site",
+  "description": "Avin Gaur — final-year student at IIT Delhi, interested in startups, strategy, technology, and a lot of things in between."
 }

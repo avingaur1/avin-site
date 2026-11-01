@@ -60,8 +60,13 @@ export const site = {
   ],
 
   intro: {
-    heading: d.intro?.heading || "Avin Gaur.",
+    heading: d.intro?.heading || "Avin Gaur",
     lines: (d.intro?.lines ?? []) as string[],
+    /** Optional portrait shown beside the intro. Hidden while src is empty. */
+    portrait: {
+      src: (d.intro?.portrait?.src ?? "") as string,
+      alt: (d.intro?.portrait?.alt || "Avin Gaur") as string,
+    },
   },
 
   work: {
@@ -106,6 +111,6 @@ export const site = {
 
   footer: {
     left: d.footer?.left ?? "© 2026 Avin Gaur",
-    right: d.footer?.right ?? "Made with curiosity.",
+    right: (d.footer?.right ?? "") as string,
   },
 };

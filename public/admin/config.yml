@@ -78,6 +78,13 @@ collections:
             collapsed: true
             fields:
               - { name: heading, label: Name heading, widget: string }
+              - name: portrait
+                label: Portrait
+                widget: object
+                hint: A photo of you, shown small beside your name. Portrait (3:4) works best. Hidden until a photo is added.
+                fields:
+                  - { name: src, label: Photo, widget: image, required: false }
+                  - { name: alt, label: Description (for screen readers), widget: string, required: false, default: Avin Gaur }
               - name: lines
                 label: Lines under the name
                 widget: list
@@ -173,14 +180,12 @@ collections:
                   - { name: text, label: Text, widget: string, required: false, hint: Leave empty to hide this row. }
                   - { name: href, label: Link, widget: string, required: false }
               - name: photos
-                label: Photo strip
+                label: Photo gallery
                 widget: list
-                min: 3
-                max: 3
-                hint: Three slots. Empty ones show a placeholder frame. Use your own photos.
+                hint: Add as many as you like. They scroll sideways in this order, and each keeps its own shape. Use your own photos.
                 summary: "{{fields.alt}}"
                 fields:
-                  - { name: src, label: Photo, widget: image, required: false }
+                  - { name: src, label: Photo, widget: image }
                   - { name: alt, label: Description (for screen readers), widget: string, required: false }
                   - { name: caption, label: Caption, widget: string, required: false }
               - name: interactiveResume
@@ -215,7 +220,7 @@ collections:
             collapsed: true
             fields:
               - { name: left, label: Left text, widget: string }
-              - { name: right, label: Right text, widget: string }
+              - { name: right, label: Right text, widget: string, required: false, hint: Optional. Leave empty for none. }
 
           - name: url
             label: Site address

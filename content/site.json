@@ -4,7 +4,11 @@
     "lines": [
       "I spend a lot of time thinking about businesses, trying out new ideas, and getting involved in things that interest me.",
       "Currently finishing my time at IIT Delhi. This website is a little bit of what I've been up to."
-    ]
+    ],
+    "portrait": {
+      "src": "",
+      "alt": "Avin Gaur"
+    }
   },
   "work": {
     "heading": "Work",
@@ -142,7 +146,7 @@
   },
   "footer": {
     "left": "© 2026 Avin Gaur",
-    "right": "Made with curiosity."
+    "right": ""
   },
   "url": "https://avingaur1.github.io/avin-site",
   "description": "Avin Gaur — final-year student at IIT Delhi, interested in startups, strategy, technology, and a lot of things in between."

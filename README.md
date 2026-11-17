@@ -24,8 +24,8 @@ Sign-in setup (one time): see [`admin-auth/SETUP.md`](admin-auth/SETUP.md).
 
 ## Spotify "Now playing"
 
-The Music row in Beyond the Resume shows what's playing on Spotify right now, or
-"Not listening right now" with a link to the playlist. A small Cloudflare Worker
+The Music row in Beyond the Resume shows what's playing on Spotify right now, or the last
+song played when nothing is. A small Cloudflare Worker
 (`spotify-now-playing/worker.js`) holds the Spotify keys; the site only knows the Worker's address,
 set as the `SPOTIFY_NOW_PLAYING_URL` Actions variable. The card stays hidden until that's set.
 Setup (one time): see [`spotify-now-playing/SETUP.md`](spotify-now-playing/SETUP.md).

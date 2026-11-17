@@ -9,7 +9,7 @@ import { NOW_PLAYING_URL } from "@/lib/nowPlaying";
  *
  * The site is static, so the card asks a small Cloudflare Worker (spotify-now-playing/worker.js)
  * what's playing. The Worker holds the Spotify keys; nothing secret is in this file.
- * Display only: it shows a track and links to it on Spotify, nothing more.
+ * Display only: it shows the current track, or the last one played, and links to it on Spotify.
  *
  * Hidden entirely until NEXT_PUBLIC_SPOTIFY_NOW_PLAYING_URL is set, so the page looks exactly
  * as before while setup isn't finished.
@@ -27,28 +27,50 @@ type Track = {
   album?: string;
   albumArt: string | null;
   url: string | null;
+  /** ISO time the song was last played (only for "last played"). */
+  playedAt?: string | null;
 };
 
-type State = { status: "loading" } | { status: "idle" } | { status: "playing"; track: Track };
+type State =
+  | { status: "loading" }
+  | { status: "idle" }
+  | { status: "playing"; track: Track }
+  | { status: "recent"; track: Track };
 
-function clean(data: unknown): State {
+function cleanTrack(t: Partial<Track> | undefined): Track | null {
   // Only trust what the card needs, in the shape it expects.
-  const d = data as { isPlaying?: boolean; track?: Partial<Track> } | null;
-  const t = d?.track;
-  if (!d?.isPlaying || !t || typeof t.name !== "string") return { status: "idle" };
+  if (!t || typeof t.name !== "string") return null;
   const url = typeof t.url === "string" && t.url.startsWith("https://open.spotify.com/") ? t.url : null;
   const art = typeof t.albumArt === "string" && t.albumArt.startsWith("https://") ? t.albumArt : null;
   return {
-    status: "playing",
-    track: {
-      id: String(t.id || t.name),
-      name: t.name,
-      artists: Array.isArray(t.artists) ? t.artists.filter((a) => typeof a === "string") : [],
-      album: typeof t.album === "string" ? t.album : "",
-      albumArt: art,
-      url,
-    },
+    id: String(t.id || t.name),
+    name: t.name,
+    artists: Array.isArray(t.artists) ? t.artists.filter((a) => typeof a === "string") : [],
+    album: typeof t.album === "string" ? t.album : "",
+    albumArt: art,
+    url,
+    playedAt: typeof t.playedAt === "string" ? t.playedAt : null,
   };
+}
+
+function clean(data: unknown): State {
+  const d = data as { isPlaying?: boolean; track?: Partial<Track>; lastPlayed?: Partial<Track> } | null;
+  const playing = d?.isPlaying ? cleanTrack(d.track) : null;
+  if (playing) return { status: "playing", track: playing };
+  const recent = cleanTrack(d?.lastPlayed);
+  return recent ? { status: "recent", track: recent } : { status: "idle" };
+}
+
+/** "just now", "5 minutes ago", "3 hours ago", "2 days ago". */
+function ago(iso?: string | null): string {
+  const t = iso ? Date.parse(iso) : NaN;
+  if (Number.isNaN(t)) return "";
+  const s = Math.max(0, (Date.now() - t) / 1000);
+  if (s < 60) return "just now";
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+  if (s < 3600) return rtf.format(-Math.round(s / 60), "minute");
+  if (s < 86400) return rtf.format(-Math.round(s / 3600), "hour");
+  return rtf.format(-Math.round(s / 86400), "day");
 }
 
 export function NowPlaying({ playlistHref }: { playlistHref?: string }) {
@@ -110,17 +132,20 @@ export function NowPlaying({ playlistHref }: { playlistHref?: string }) {
 
   if (!ENDPOINT) return null;
 
-  if (state.status === "playing") {
+  if (state.status === "playing" || state.status === "recent") {
     const { track } = state;
+    const playing = state.status === "playing";
     const artists = track.artists.join(", ");
     const href = track.url || playlistHref;
+    const when = playing ? "" : ago(track.playedAt);
+    const prefix = playing ? "Now playing on Spotify" : `Last played on Spotify${when ? `, ${when}` : ""}`;
     return (
-      <CardShell href={href} label={`Now playing on Spotify: ${track.name}${artists ? ` by ${artists}` : ""}`}>
+      <CardShell href={href} label={`${prefix}: ${track.name}${artists ? ` by ${artists}` : ""}`}>
         {/* Keyed by track, so a new song fades in gently instead of snapping. */}
         <div key={track.id} className="np-in flex min-w-0 flex-1 items-center gap-3.5">
           <Art src={track.albumArt} alt={track.album ? `Album art for ${track.album}` : ""} />
           <div className="min-w-0 flex-1">
-            <Label playing />
+            <Label kind={playing ? "playing" : "recent"} when={when} />
             <p className="truncate text-[14px] font-medium leading-[1.45] text-fg" title={track.name}>
               {track.name}
             </p>
@@ -198,15 +223,17 @@ function CardShell({ href, label, children }: { href?: string; label: string; ch
   );
 }
 
-function Label({ playing = false }: { playing?: boolean }) {
+function Label({ kind = "plain", when = "" }: { kind?: "playing" | "recent" | "plain"; when?: string }) {
+  const text = kind === "playing" ? "Now playing" : kind === "recent" ? "Last played" : "Spotify";
+  const extra = kind === "playing" ? "Spotify" : kind === "recent" ? when : "";
   return (
-    <p className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase leading-[1.5] tracking-[0.08em] text-muted">
+    <p className="flex min-w-0 items-center gap-1.5 text-[10.5px] font-medium uppercase leading-[1.5] tracking-[0.08em] text-muted">
       <span
         aria-hidden
-        className={`inline-block h-[6px] w-[6px] rounded-full ${playing ? "np-dot bg-spotify" : "bg-line"}`}
+        className={`inline-block h-[6px] w-[6px] shrink-0 rounded-full ${kind === "playing" ? "np-dot bg-spotify" : "bg-line"}`}
       />
-      {playing ? "Now playing" : "Spotify"}
-      {playing && <span className="font-normal normal-case tracking-normal opacity-70">· Spotify</span>}
+      <span className="shrink-0">{text}</span>
+      {extra && <span className="truncate font-normal normal-case tracking-normal opacity-70">· {extra}</span>}
     </p>
   );
 }

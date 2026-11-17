@@ -3,8 +3,9 @@
  *
  * GitHub Pages can't keep secrets, so this small Cloudflare Worker holds the Spotify keys,
  * asks Spotify what Avin is listening to, and hands the website only what it shows:
- * track name, artists, album art and the track's Spotify link. It is read-only: it uses
- * the single scope `user-read-currently-playing` and can never control playback.
+ * track name, artists, album art and the track's Spotify link. When nothing is playing it
+ * shows the last song played instead. It is read-only: it uses the scopes
+ * `user-read-currently-playing` and `user-read-recently-played`, and can never control playback.
  *
  * Settings (Cloudflare → Worker → Settings → Variables and Secrets):
  *   SPOTIFY_CLIENT_ID      text    from your Spotify app
@@ -16,16 +17,17 @@
  *   SPOTIFY_KV             KV      optional binding; keeps a new refresh token if Spotify ever issues one
  *
  * Endpoints:
- *   GET /now-playing                 JSON for the website
+ *   GET /now-playing                 JSON for the website (current song, or the last one played)
  *   GET /login?key=<SETUP_KEY>       one-time: connect your Spotify account
  *   GET /callback                    Spotify sends you back here; shows the refresh token once
  *
  * Setup steps: see spotify-now-playing/SETUP.md.
  */
 
-const SCOPE = "user-read-currently-playing";
+const SCOPES = ["user-read-currently-playing", "user-read-recently-played"];
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 const NOW_URL = "https://api.spotify.com/v1/me/player/currently-playing";
+const RECENT_URL = "https://api.spotify.com/v1/me/player/recently-played?limit=1";
 const NO_STORE = { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" };
 const STALE_LIMIT_MS = 5 * 60 * 1000; // serve the last good answer for up to 5 minutes when Spotify is unreachable
 
@@ -34,6 +36,7 @@ let accessToken = { value: "", expires: 0 };
 let latest = { body: null, at: 0 }; // last good answer
 let inflight = null; // one Spotify request at a time, shared by everyone asking at once
 let backoffUntil = 0; // set when Spotify says "slow down" (HTTP 429)
+let lastSeen = null; // last song seen playing, in case "recently played" isn't available
 
 /* ---------------------------------------------------------------- helpers */
 
@@ -135,40 +138,65 @@ function pickArt(images) {
   return good && good.url.startsWith("https://") ? good.url : null;
 }
 
-function shape(data) {
-  const item = data && data.item;
-  // Paused, an ad, a podcast episode or a private session all count as "not listening".
-  if (!data || !data.is_playing || data.currently_playing_type !== "track" || !item || item.type !== "track") {
-    return { isPlaying: false };
-  }
+function track(item) {
+  if (!item || item.type !== "track") return null;
   const url = item.external_urls && item.external_urls.spotify;
   return {
-    isPlaying: true,
-    track: {
-      id: item.id || item.uri || item.name,
-      name: item.name || "Unknown track",
-      artists: (item.artists || []).map((a) => a && a.name).filter(Boolean),
-      album: (item.album && item.album.name) || "",
-      albumArt: pickArt(item.album && item.album.images),
-      url: typeof url === "string" && url.startsWith("https://open.spotify.com/") ? url : null,
-    },
+    id: item.id || item.uri || item.name,
+    name: item.name || "Unknown track",
+    artists: (item.artists || []).map((a) => a && a.name).filter(Boolean),
+    album: (item.album && item.album.name) || "",
+    albumArt: pickArt(item.album && item.album.images),
+    url: typeof url === "string" && url.startsWith("https://open.spotify.com/") ? url : null,
   };
 }
 
-async function askSpotify(env, retried = false) {
+async function spotifyGet(env, url, retried = false) {
   const token = await getAccessToken(env);
-  const res = await fetch(NOW_URL, { headers: { Authorization: `Bearer ${token}` } });
-
-  if (res.status === 204) return { isPlaying: false }; // nothing playing
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
   if (res.status === 401 && !retried) {
     accessToken = { value: "", expires: 0 }; // expired early; get a fresh one and try once more
-    return askSpotify(env, true);
+    return spotifyGet(env, url, true);
   }
   if (res.status === 429) {
     throw Object.assign(new Error("rate limited"), { retryAfter: Number(res.headers.get("Retry-After")) || 30 });
   }
-  if (!res.ok) throw new Error(`Spotify returned ${res.status}`);
-  return shape(await res.json().catch(() => null));
+  return res;
+}
+
+/** The most recent finished song, or null if Spotify won't say (e.g. connected before this permission was added). */
+async function lastPlayed(env) {
+  const res = await spotifyGet(env, RECENT_URL);
+  if (!res.ok) return null;
+  const data = await res.json().catch(() => null);
+  const entry = data && Array.isArray(data.items) ? data.items[0] : null;
+  const t = entry && track(entry.track);
+  return t ? { ...t, playedAt: entry.played_at || null } : null;
+}
+
+async function askSpotify(env) {
+  const res = await spotifyGet(env, NOW_URL);
+  if (res.status !== 204 && !res.ok) throw new Error(`Spotify returned ${res.status}`);
+  const data = res.status === 204 ? null : await res.json().catch(() => null);
+  const current = data && data.currently_playing_type === "track" ? track(data.item) : null;
+
+  // A song is playing right now.
+  if (current && data.is_playing) {
+    lastSeen = { ...current, playedAt: new Date().toISOString() };
+    return { isPlaying: true, track: current };
+  }
+  // Paused on a song: that song is the last one played.
+  if (current) {
+    const when = lastSeen && lastSeen.id === current.id ? lastSeen.playedAt : null;
+    return { isPlaying: false, lastPlayed: { ...current, playedAt: when } };
+  }
+  // Nothing playing (or a podcast, an ad, a private session): use listening history.
+  const recent = await lastPlayed(env).catch((err) => {
+    if (err.retryAfter) throw err;
+    return null;
+  });
+  const fallback = recent || lastSeen;
+  return fallback ? { isPlaying: false, lastPlayed: fallback } : { isPlaying: false };
 }
 
 async function nowPlaying(req, env, ctx) {
@@ -232,7 +260,7 @@ function login(req, env) {
   const auth = new URL("https://accounts.spotify.com/authorize");
   auth.searchParams.set("response_type", "code");
   auth.searchParams.set("client_id", env.SPOTIFY_CLIENT_ID);
-  auth.searchParams.set("scope", SCOPE);
+  auth.searchParams.set("scope", SCOPES.join(" "));
   auth.searchParams.set("redirect_uri", `${url.origin}/callback`);
   auth.searchParams.set("state", state);
   return new Response(null, {
@@ -266,7 +294,7 @@ async function callback(req, env) {
   if (!out.refresh_token) {
     return html(`<p>Spotify didn't complete the sign-in (${escapeHtml(out.error_description || out.error || res.status)}). Please try again.</p>`, 400);
   }
-  if (out.scope && out.scope.split(" ").some((s) => s && s !== SCOPE)) {
+  if (out.scope && out.scope.split(" ").some((s) => s && !SCOPES.includes(s))) {
     return html(`<p>Spotify granted more access than expected. Please try again.</p>`, 400);
   }
 

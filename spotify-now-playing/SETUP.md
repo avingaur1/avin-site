@@ -64,9 +64,11 @@ Cloudflare → `avin-now-playing` → **Settings → Variables and Secrets → A
 ## 4. Connect your Spotify account (gets the refresh token)
 
 1. In your browser, open: `WORKER/login?key=<your SETUP_KEY>`
-2. Spotify asks you to let the app **"View your currently playing content"**. That's the only
-   permission it requests (`user-read-currently-playing`). It can't control playback, see your
-   playlists, or change anything. Click **Agree**.
+2. Spotify asks you to let the app see **the content you are playing** and your **recently played
+   content**. Those are the only permissions it requests (`user-read-currently-playing` and
+   `user-read-recently-played`). Spotify also always lists your public profile on this screen; the
+   Worker never reads it. It can't control playback, see private playlists, or change anything.
+   Click **Agree**.
 3. You land on a page saying **Spotify connected** with a long token. It's shown once and isn't stored.
    Copy it.
 4. Cloudflare → Worker → **Variables and Secrets**:
@@ -84,7 +86,7 @@ dashboard → **User Management**, add your own name and Spotify email, and try 
    ```json
    {"isPlaying":true,"track":{"name":"…","artists":["…"],"albumArt":"https://i.scdn.co/…","url":"https://open.spotify.com/track/…"}}
    ```
-3. Pause, wait about 30 seconds, refresh: `{"isPlaying":false,…}`.
+3. Pause, wait about 30 seconds, refresh: `{"isPlaying":false,"lastPlayed":{…}}` with the song you paused on.
 
 Answers are cached for about 25 seconds, so a change can take that long to show up.
 
@@ -107,8 +109,8 @@ This is a *Variable*, not a *Secret*, on purpose: the Worker's address is public
 - Desktop and phone: open https://avingaur.com/#beyond while music plays. You should see the
   album art, song and artists, with a green dot and **Now playing**. Tapping the card opens the
   track in Spotify.
-- Pause: within about a minute it switches to **Not listening right now**, and the card links to
-  your playlist.
+- Pause: within about a minute it switches to **Last played** with that song and how long ago.
+  "Not listening right now" (linking to your playlist) only shows if Spotify has no recent history.
 - Try light and dark mode with the theme toggle.
 
 ---
@@ -139,7 +141,8 @@ This is a *Variable*, not a *Secret*, on purpose: the Worker's address is public
 | Situation | Card |
 | --- | --- |
 | A song is playing | Album art, song, artists, **Now playing**; links to the track |
-| Paused, nothing playing, podcast, ad, or private session | **Not listening right now**; links to your playlist |
+| Paused, nothing playing, podcast, ad, or private session | **Last played** · how long ago, with that song; links to the track |
+| No listening history available | **Not listening right now**; links to your playlist |
 | Spotify slow or unreachable | Last known song for up to 5 minutes, then **Not listening right now** |
 | Visitor offline | Keeps what's on screen once, then **Not listening right now** |
 | No album art | A small music-note placeholder |
@@ -156,10 +159,19 @@ This is a *Variable*, not a *Secret*, on purpose: the Worker's address is public
 | Worker log says "token refresh failed (400 invalid_grant)" | The app was disconnected from your Spotify account. Re-add `SETUP_KEY` and repeat step 4. |
 | Browser console shows a CORS error | Add the site's exact address (e.g. `https://www.avingaur.com`) to `ALLOWED_ORIGINS`. |
 
+## Reconnecting (every ~180 days, or after adding a permission)
+
+Spotify refresh tokens for this app last about 180 days. When the card stops updating:
+
+1. Worker → **Variables and Secrets** → add a **Secret** `SETUP_KEY` (any new random phrase) → deploy.
+2. Open `WORKER/login?key=<that phrase>` → **Agree** → copy the token.
+3. Edit `SPOTIFY_REFRESH_TOKEN` (pencil icon) → paste the new token → deploy.
+4. Delete `SETUP_KEY` → **Delete & Deploy**.
+
 ## Safety, in short
 
 - Client secret and refresh token live only in Cloudflare, stored as encrypted secrets.
-- The only permission is `user-read-currently-playing`: read-only, no playback control.
+- The only permissions are `user-read-currently-playing` and `user-read-recently-played`: read-only, no playback control.
 - The Worker only answers `GET` requests, only to the origins you list, and returns only the
   song, artists, album art and link, never tokens.
 - `/login` works only while `SETUP_KEY` exists, and is tied to your browser with a one-time cookie.

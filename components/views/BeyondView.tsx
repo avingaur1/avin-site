@@ -37,10 +37,11 @@ export function BeyondView({
           {visible.map((item, index) => {
             const external = item.href?.startsWith("http");
             return (
-              <div key={item.label}>
+              // The Music row spans both columns so the Spotify strip lines up with the gallery below.
+              <div key={item.label} className={index === musicIndex ? "sm:col-span-2" : undefined}>
                 <dt className="text-[14px] font-medium">{item.label}</dt>
                 {index === musicIndex && (
-                  <dd className="mb-2 mt-1.5">
+                  <dd className="mb-2 mt-1.5 min-w-0">
                     <NowPlaying playlistHref={item.href} />
                   </dd>
                 )}

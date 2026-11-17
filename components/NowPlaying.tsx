@@ -196,7 +196,7 @@ export function NowPlaying({ playlistHref }: { playlistHref?: string }) {
 
 function CardShell({ href, label, children }: { href?: string; label: string; children: React.ReactNode }) {
   const cls =
-    "group flex w-full max-w-[400px] items-center gap-3 rounded-[10px] border border-line p-2.5 pr-3.5 text-left";
+    "group flex w-full min-w-0 items-center gap-3 rounded-[10px] border border-line p-2 pr-4 text-left";
   if (!href) {
     return (
       <div className={cls} role="status" aria-label={label}>
@@ -217,7 +217,7 @@ function CardShell({ href, label, children }: { href?: string; label: string; ch
         size={15}
         strokeWidth={1.75}
         aria-hidden
-        className="shrink-0 self-start text-muted transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+        className="ml-auto shrink-0 text-muted transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
       />
     </a>
   );
@@ -243,14 +243,14 @@ function Art({ src, alt }: { src: string | null; alt: string }) {
   const [loaded, setLoaded] = useState(false);
   const show = src && !broken;
   return (
-    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[6px] bg-placeholder">
+    <div className="relative h-[60px] w-[60px] shrink-0 overflow-hidden rounded-[6px] bg-placeholder">
       {show ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
           alt={alt}
-          width={64}
-          height={64}
+          width={60}
+          height={60}
           loading="lazy"
           decoding="async"
           referrerPolicy="no-referrer"

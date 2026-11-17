@@ -1,6 +1,12 @@
 import type { BeyondItem } from "@/content/site";
 import { Section } from "../Section";
 import { Gallery, type GalleryPhoto } from "../Gallery";
+import { NowPlaying } from "../NowPlaying";
+import { NOW_PLAYING_URL } from "@/lib/nowPlaying";
+
+/** The Music row gets the live Spotify card above its link. */
+const isMusic = (item: BeyondItem) =>
+  item.label?.trim().toLowerCase() === "music" || !!item.href?.includes("spotify.com");
 
 /**
  * Beyond the Resume, as a pure view.
@@ -20,6 +26,7 @@ export function BeyondView({
   interactiveResume: { label: string; href: string };
 }) {
   const visible = items.filter((i) => i.text?.trim());
+  const musicIndex = NOW_PLAYING_URL ? visible.findIndex(isMusic) : -1;
   return (
     <Section id="beyond" heading={heading}>
       <p className="-mt-2 max-w-[640px]">{description}</p>
@@ -27,11 +34,16 @@ export function BeyondView({
       {/* Only rows with text are shown, so empty ones never look unfinished. */}
       {visible.length > 0 && (
         <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
-          {visible.map((item) => {
+          {visible.map((item, index) => {
             const external = item.href?.startsWith("http");
             return (
               <div key={item.label}>
                 <dt className="text-[14px] font-medium">{item.label}</dt>
+                {index === musicIndex && (
+                  <dd className="mb-2 mt-1.5">
+                    <NowPlaying playlistHref={item.href} />
+                  </dd>
+                )}
                 <dd className="text-[14px] text-muted">
                   {item.href ? (
                     <a

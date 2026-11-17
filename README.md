@@ -21,6 +21,14 @@ in the browser before upload. Removing a photo from the gallery keeps its file, 
 Thoughts are not edited here: they come from Medium automatically.
 
 Sign-in setup (one time): see [`admin-auth/SETUP.md`](admin-auth/SETUP.md).
+
+## Spotify "Now playing"
+
+The Music row in Beyond the Resume shows what's playing on Spotify right now, or
+"Not listening right now" with a link to the playlist. A small Cloudflare Worker
+(`spotify-now-playing/worker.js`) holds the Spotify keys; the site only knows the Worker's address,
+set as the `SPOTIFY_NOW_PLAYING_URL` Actions variable. The card stays hidden until that's set.
+Setup (one time): see [`spotify-now-playing/SETUP.md`](spotify-now-playing/SETUP.md).
 The editor's code is in `editor/` and `app/admin/`.
 
 ## Editing files directly
@@ -32,6 +40,7 @@ The editor's code is in `editor/` and `app/admin/`.
 | Photos | `public/images/` (refer to them as `/images/name.jpg`) |
 | Colours | `app/globals.css` |
 | Layout | `components/` |
+| Spotify card | `components/NowPlaying.tsx` (Worker: `spotify-now-playing/`) |
 
 A post is published only when `draft: false` **and** it has a `date`:
 

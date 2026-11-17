@@ -9,6 +9,7 @@
   --line: #e5e5e5;
   --accent: #315cfd;
   --placeholder: #f1f1ee;
+  --spotify: #1db954;
   color-scheme: light;
 }
 
@@ -19,6 +20,7 @@
   --line: #333333;
   --accent: #8ca5ff;
   --placeholder: #1e1e1e;
+  --spotify: #1ed760;
   color-scheme: dark;
 }
 
@@ -29,6 +31,7 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
   --color-placeholder: var(--placeholder);
+  --color-spotify: var(--spotify);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
 }
@@ -77,6 +80,27 @@ hr,
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* Spotify "Now playing" card: a new song fades in; the green dot breathes slowly while music plays */
+@media (prefers-reduced-motion: no-preference) {
+  .np-in {
+    animation: np-in 320ms ease-out both;
+  }
+  .np-dot {
+    animation: np-breathe 2.4s ease-in-out infinite;
+  }
+}
+@keyframes np-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+}
+@keyframes np-breathe {
+  50% {
+    opacity: 0.45;
+  }
 }
 
 /* Sections land below the sticky nav */

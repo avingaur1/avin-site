@@ -1,0 +1,16 @@
+# Optional: only needed if you deploy from the command line (`npx wrangler deploy`).
+# Deploying by pasting worker.js in the Cloudflare dashboard works just as well. See SETUP.md.
+# Secrets are NOT set here: use `npx wrangler secret put NAME` or the dashboard.
+name = "avin-now-playing"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+ALLOWED_ORIGINS = "https://avingaur.com,https://www.avingaur.com"
+CACHE_SECONDS = "25"
+
+# Optional: keeps a new refresh token if Spotify ever issues one. Create it with
+# `npx wrangler kv namespace create SPOTIFY_KV` and paste the id below, then uncomment.
+# [[kv_namespaces]]
+# binding = "SPOTIFY_KV"
+# id = "<your-namespace-id>"

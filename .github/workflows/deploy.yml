@@ -35,6 +35,8 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: ""
           # Address of the editor's sign-in helper (Settings → Secrets and variables → Actions → Variables).
           NEXT_PUBLIC_ADMIN_AUTH_URL: ${{ vars.ADMIN_AUTH_URL }}
+          # Address of the Spotify "now playing" Worker (same Variables tab). Leave unset to hide the card.
+          NEXT_PUBLIC_SPOTIFY_NOW_PLAYING_URL: ${{ vars.SPOTIFY_NOW_PLAYING_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

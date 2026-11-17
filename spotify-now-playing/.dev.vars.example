@@ -1,0 +1,5 @@
+# For `npx wrangler dev` only. Copy to .dev.vars (git-ignored). Never commit real values.
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
+SPOTIFY_REFRESH_TOKEN=
+ALLOWED_ORIGINS=http://localhost:3000

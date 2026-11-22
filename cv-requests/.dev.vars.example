@@ -1,0 +1,13 @@
+# Copy to .dev.vars for `npx wrangler dev`. Never commit .dev.vars (it's in .gitignore).
+SUPABASE_URL=https://<project-ref>.supabase.co
+SUPABASE_SERVICE_KEY=sb_secret_...
+RESEND_API_KEY=re_...
+ADMIN_EMAIL=you@example.com
+IP_HASH_SALT=<any long random string>
+# Optional
+TURNSTILE_SECRET_KEY=
+ADMIN_GITHUB_ID=
+REPLY_TO=
+# For local testing against `npm run dev`:
+ALLOWED_ORIGINS=http://localhost:3000
+SITE_URL=http://localhost:3000

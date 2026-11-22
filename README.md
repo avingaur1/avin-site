@@ -31,6 +31,15 @@ set as the `SPOTIFY_NOW_PLAYING_URL` Actions variable. The card stays hidden unt
 Setup (one time): see [`spotify-now-playing/SETUP.md`](spotify-now-playing/SETUP.md).
 The editor's code is in `editor/` and `app/admin/`.
 
+## CV requests
+
+**Request CV ↗** in Let's Connect opens a short form. You get an email for each request and approve
+or reject it on `/admin/cv-requests/` (same sign-in as the editor). Approved visitors get a private
+link to `/cv/` that works for 24 hours. The CV PDF lives in a private Supabase bucket, never in this
+repo. A Cloudflare Worker (`cv-requests/worker.js`) holds every key; the site only knows its address,
+set as the `CV_API_URL` Actions variable. The link stays hidden until that's set.
+Setup (one time): see [`cv-requests/SETUP.md`](cv-requests/SETUP.md).
+
 ## Editing files directly
 
 | What | Where |
@@ -41,6 +50,7 @@ The editor's code is in `editor/` and `app/admin/`.
 | Colours | `app/globals.css` |
 | Layout | `components/` |
 | Spotify card | `components/NowPlaying.tsx` (Worker: `spotify-now-playing/`) |
+| CV requests | `components/RequestCv.tsx`, `components/CvViewer.tsx`, `editor/cv/` (Worker: `cv-requests/`) |
 
 A post is published only when `draft: false` **and** it has a `date`:
 

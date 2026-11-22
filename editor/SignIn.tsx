@@ -7,7 +7,17 @@ import { REPO } from "./config";
 import { githubSignInAvailable, startGitHubSignIn, storeToken } from "./auth";
 import { Button, inputCls } from "./ui";
 
-export function SignIn({ message, onToken }: { message?: string; onToken: (t: string) => void }) {
+export function SignIn({
+  message,
+  onToken,
+  title = "Edit your website",
+  subtitle = "Sign in to update your work, photos and homepage.",
+}: {
+  message?: string;
+  onToken: (t: string) => void;
+  title?: string;
+  subtitle?: string;
+}) {
   const oauth = githubSignInAvailable();
   const [showToken, setShowToken] = useState(!oauth);
   const [token, setToken] = useState("");
@@ -21,8 +31,8 @@ export function SignIn({ message, onToken }: { message?: string; onToken: (t: st
       <div className="flex flex-1 items-start justify-center px-4 pb-16 pt-[8vh]">
         <div className="w-full max-w-[380px]">
           <p className="text-[15px] font-semibold tracking-tight">avin.</p>
-          <h1 className="mt-6 text-[28px] font-semibold leading-tight tracking-[-0.02em]">Edit your website</h1>
-          <p className="mt-2 text-muted">Sign in to update your work, photos and homepage.</p>
+          <h1 className="mt-6 text-[28px] font-semibold leading-tight tracking-[-0.02em]">{title}</h1>
+          <p className="mt-2 text-muted">{subtitle}</p>
 
           {message && (
             <p role="alert" className="mt-6 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-[14px]">

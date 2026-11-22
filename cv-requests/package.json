@@ -1,0 +1,13 @@
+{
+  "name": "avin-cv-requests",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Worker for CV requests. Tests run the Worker against the real SQL schema in PGlite (Postgres in WASM) with mocked email, GitHub and storage.",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "deploy": "npx wrangler deploy"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.3.0"
+  }
+}

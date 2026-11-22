@@ -138,6 +138,7 @@ export default function AdminApp() {
 
   useEffect(() => {
     const back = readReturnFromSignIn();
+    if (back.redirecting) return; // signed in from another admin page (e.g. CV requests); going back there
     if (back.error) {
       setSignInMsg(back.error);
       setPhase("signin");

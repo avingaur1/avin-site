@@ -1,0 +1,28 @@
+# Optional: only needed if you deploy from the command line (`npx wrangler deploy` in this folder).
+# Pasting worker.js into the Cloudflare dashboard works just as well. See SETUP.md.
+# Secrets are NOT set here: use `npx wrangler secret put NAME` or the dashboard.
+name = "avin-cv-requests"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[vars]
+SITE_URL = "https://avingaur.com"
+ALLOWED_ORIGINS = "https://avingaur.com,https://www.avingaur.com"
+ADMIN_GITHUB_LOGIN = "avingaur1"
+MAIL_FROM = "Avin Gaur <cv@mail.avingaur.com>"
+CV_BUCKET = "private-cv"
+CV_OBJECT_PATH = "cv.pdf"
+CV_FILENAME = "Avin-Gaur-CV.pdf"
+ACCESS_HOURS = "24"
+TIMEZONE = "Asia/Kolkata"
+# SUPABASE_URL is not secret, but it's project-specific: set it in the dashboard or uncomment.
+# SUPABASE_URL = "https://<project-ref>.supabase.co"
+
+# Once a day: keeps a free Supabase project from pausing when nobody has asked for a while.
+[triggers]
+crons = ["17 3 * * *"]
+
+# Keep observability logs on; the Worker never logs names, emails, reasons or tokens.
+[observability]
+enabled = true

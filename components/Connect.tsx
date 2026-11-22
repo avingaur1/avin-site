@@ -1,5 +1,7 @@
 import { site, type LinkItem } from "@/content/site";
 import { Section } from "./Section";
+import { RequestCv } from "./RequestCv";
+import { CV_API_URL } from "@/lib/cvApi";
 
 export function Connect() {
   return <ConnectView {...site.connect} />;
@@ -41,6 +43,11 @@ export function ConnectView({
             </li>
           );
         })}
+        {CV_API_URL && (
+          <li>
+            <RequestCv />
+          </li>
+        )}
       </ul>
     </Section>
   );

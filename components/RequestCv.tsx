@@ -193,9 +193,7 @@ function RequestCvDialog({ onClose }: { onClose: () => void }) {
           </div>
         ) : (
           <form ref={formRef} noValidate onSubmit={submit} className="mt-2" aria-describedby={errors.form ? ids.err : undefined}>
-            <p className="text-[14.5px] text-muted">I&apos;ll email you a private link if I approve your request.</p>
-
-            <div className="mt-6 space-y-4">
+            <div className="mt-5 space-y-4">
               <div>
                 <label htmlFor={ids.name} className="block text-[13.5px] font-medium">
                   Full Name

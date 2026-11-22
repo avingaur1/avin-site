@@ -48,10 +48,12 @@ old one first. Anyone with an active link sees the new version.
 1. Sign up at https://resend.com.
 2. **Domains → Add domain** → enter **`mail.avingaur.com`** → region closest to you → **Add**.
    Using a `mail.` subdomain means your main domain's existing email and records are not touched.
-3. Resend lists 3–4 DNS records (an MX and TXT record for sending, plus a DKIM TXT record).
-   **These are new records in your Cloudflare DNS. Nothing existing is changed or removed.**
-   Cloudflare → `avingaur.com` → **DNS → Records → Add record**: copy each one exactly
-   (Type, Name, Content, Priority for MX). Set **Proxy status: DNS only** (grey cloud).
+3. Resend lists a few DNS records (a DKIM TXT record and a CNAME for sending; names end in `.mail`).
+   **These are new records. Nothing existing is changed or removed.** Easiest: click **Auto configure**
+   (Cloudflare) and approve. Or add them by hand in Cloudflare → `avingaur.com` → **DNS → Records → Add record**:
+   use Resend's copy buttons (values are truncated on screen), paste the Name exactly as shown
+   (e.g. `resend._domainkey.mail`; Cloudflare adds `.avingaur.com`), and set CNAMEs to
+   **DNS only** (grey cloud). Leave "Receiving" off; DMARC (`_dmarc.mail`, `v=DMARC1; p=none;`) is optional.
 4. Back in Resend, click **Verify DNS Records**. It usually turns green within minutes, and can take up to a few hours.
 5. **API Keys → Create API key** → name `avin-cv-worker`, permission **Sending access**,
    domain `mail.avingaur.com` → copy the key (`re_…`).

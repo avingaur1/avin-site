@@ -2,9 +2,10 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Briefcase, Check, CircleAlert, ExternalLink, Eye, FileText, Images, Loader2, LogOut } from "lucide-react";
+import { Briefcase, Check, CircleAlert, ExternalLink, Eye, FileText, Images, Inbox, Loader2, LogOut } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { ALLOWED_USER, IMAGES_DIR, LIVE_URL, PUBLIC_IMAGES, RAW, SITE_JSON } from "./config";
+import { ALLOWED_USER, BASE_PATH, IMAGES_DIR, LIVE_URL, PUBLIC_IMAGES, RAW, SITE_JSON } from "./config";
+import { CV_API_URL } from "@/lib/cvApi";
 import * as gh from "./github";
 import { GitHubError, type DeployState } from "./github";
 import { clearDraft, loadDraft, saveDraft, type Draft, type PendingUpload } from "./draft";
@@ -399,6 +400,14 @@ export default function AdminApp() {
               ))}
             </nav>
             <div className="flex items-center gap-1">
+              {CV_API_URL && (
+                <a
+                  href={`${BASE_PATH}/admin/cv-requests/`}
+                  className="inline-flex h-8 items-center gap-1.5 rounded-full px-2.5 text-[13px] text-muted hover:text-fg"
+                >
+                  <Inbox size={14} aria-hidden /> CV requests
+                </a>
+              )}
               <a
                 href={LIVE_URL}
                 target="_blank"
